@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"math/big"
 	"os"
 
 	"github.com/aaronwinter/celo-blockchain/accounts/abi/bind_v2"
@@ -46,9 +45,10 @@ func main() {
 	}
 
 	// Fix with EIP155 signer:
-	chainId := new(big.Int).SetInt64(44787)
-	transactOpts, err := bind_v2.NewTransactorWithChainId(f, "", chainId)
-	// transactOpts, err := bind_v2.NewTransactor(f, "")
+	// chainId := new(big.Int).SetInt64(44787)
+	// transactOpts, err := bind_v2.NewTransactorWithChainId(f, "", chainId)
+	// Using the default Transactor will fail because the signer does not follow EIP155
+	transactOpts, err := bind_v2.NewTransactor(f, "")
 	if err != nil {
 		log.Fatal(err.Error())
 	}
