@@ -12,6 +12,9 @@ import (
 	"github.com/celo-org/celo-blockchain/ethclient"
 )
 
+// generate a new account using `geth account new`
+// fund this account with alfajores celo
+// paste path to keystore file here
 const PATH_TO_SK = "/home/user/.celo/keystore/UTC--2021-10-04T14-10-50.370759409Z--6d214a0d085965b19f7e9ace6adc550094bdcaab"
 const RPC_ALFAJORES = "https://alfajores-forno.celo-testnet.org"
 const CONTRACT = "0x8d3d74FB54780eA6c75e3fd9e79413dc71003A92"
