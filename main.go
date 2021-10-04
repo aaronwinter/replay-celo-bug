@@ -1,14 +1,18 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/aaronwinter/replay-celo-bug/counter"
+	"github.com/celo-org/celo-blockchain/accounts/abi/bind_v2"
 	"github.com/celo-org/celo-blockchain/common"
 	"github.com/celo-org/celo-blockchain/ethclient"
 )
 
+const PATH_TO_SK = "/home/user/.celo/keystore/UTC--2021-10-04T14-10-50.370759409Z--6d214a0d085965b19f7e9ace6adc550094bdcaab"
 const RPC_ALFAJORES = "https://alfajores-forno.celo-testnet.org"
 const CONTRACT = "0x8d3d74FB54780eA6c75e3fd9e79413dc71003A92"
 
@@ -30,4 +34,28 @@ func main() {
 	}
 
 	fmt.Println("Counter value:", value.String())
+
+	// Creating a keyed transactor to increment the counter (state changes)
+	f, err := os.Open(PATH_TO_SK)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	transactOpts, err := bind_v2.NewTransactor(f, "")
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	txObj := counter.Increment(transactOpts)
+	txProm, err := txObj.Send()
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	txReceipt, err := txProm.WaitMined(context.TODO())
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	fmt.Println("receipt - tx hash:", txReceipt.TxHash.Hex())
 }
