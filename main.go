@@ -4,12 +4,13 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"math/big"
 	"os"
 
+	"github.com/aaronwinter/celo-blockchain/accounts/abi/bind_v2"
+	"github.com/aaronwinter/celo-blockchain/common"
+	"github.com/aaronwinter/celo-blockchain/ethclient"
 	"github.com/aaronwinter/replay-celo-bug/counter"
-	"github.com/celo-org/celo-blockchain/accounts/abi/bind_v2"
-	"github.com/celo-org/celo-blockchain/common"
-	"github.com/celo-org/celo-blockchain/ethclient"
 )
 
 // generate a new account using `geth account new`
@@ -44,7 +45,10 @@ func main() {
 		log.Fatal(err.Error())
 	}
 
-	transactOpts, err := bind_v2.NewTransactor(f, "")
+	// Fix with EIP155 signer:
+	chainId := new(big.Int).SetInt64(44787)
+	transactOpts, err := bind_v2.NewTransactorWithChainId(f, "", chainId)
+	// transactOpts, err := bind_v2.NewTransactor(f, "")
 	if err != nil {
 		log.Fatal(err.Error())
 	}

@@ -2,7 +2,7 @@ module github.com/aaronwinter/replay-celo-bug/counter
 
 go 1.17
 
-require github.com/celo-org/celo-blockchain v1.4.0
+require github.com/aaronwinter/celo-blockchain v1.4.2
 
 require (
 	filippo.io/edwards25519 v1.0.0-alpha.2 // indirect
